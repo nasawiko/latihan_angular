@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Home</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+
+</head>
+
+<body ng-app="crudApp" style="background-color: #dc3545; height: 100%; ">
+    
+
+    <!-- navbar1 -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">LP3I UNIVERSITY</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
+            aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarText">
+            
+    </nav>
+    <!-- Image -->
+    <div class="jumbotron-fluid">
+        <img src="assets/img/logo.jpg" alt="" width="100%" height="450px">
+    </div>
+    <!-- navbar2 -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-danger">
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="home.html">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false" style="color: white">
+                        Master
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="data_guru.html">Data Guru</a>
+                        <a class="dropdown-item" href="data_kelas.html">Data Kelas</a>
+                        <a class="dropdown-item" href="data_matpel.html">Data Mata Pelajaran</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false" style="color: white">
+                        Kalender Akademik
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="">Jadwal KBM</a>
+                        <a class="dropdown-item" href="">Jadwal UTS</a>
+                        <a class="dropdown-item" href="">Jadwal UAS</a>
+                        <a class="dropdown-item" href="">Jadwal Remedial</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false" style="color: white">
+                        Laporan
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="#">Pesan Guru</a>
+                        <a class="dropdown-item" href="#">Laporan</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" style="color: white">LogOut</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="text-white text-center" style="background-color: black; height: 440px;">
+        <br>
+        <h4>Data Mata Pelajaran</h4>
+        <br>
+        <div class="container" ng-controller="crudController" style="background-color: white">
+            <center>
+                <div class="alert alert-success" role="alert" ng-show="alert">{{ message }}</div>
+                <table border="1" rules="none">
+                    <tr>
+                        <td width="200px">
+                            <button type="button" ng-click="addMatpel()" style="color: blue">Tambah Matpel</button>
+                        </td>
+                        <td width="250px">
+                            <form>
+                                <input type="search" ng-model="search" aria-label="Search" placeholder="Cari Mata pelajaran">
+                                <button ng-model="search">Cari</button>
+                            </form>
+                        </td>
+                        <td width="200px">
+                            <div style="width:20;margin-bottom: -1%;margin-left: 1%">
+                                <select ng-model="actItem" ng-change="activeStatus(actItem)" ng-options="page for (idx,page) in itemShowCount">
+                                </select>
+                            </div>
+                        </td>
+                        
+                    </tr>
+                </table>
+                <br>
+                <table border="1">
+                    <tr>
+                        <th style="color: black" width="50px">No</th>
+                        <th style="color: black" width="200px" ng-click="sort('nama_matpel')">Nama Mata Pelajaran<span
+                                class="glyphicon sort-icon" ng-show="sortKey=='nama_matpel'"
+                                ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                        </th>
+                        <th style="color: black" width="200px">Opsi</th>
+                    </tr>
+                    <tr dir-paginate="matpel in matpels|orderBy:sortKey:reverse|filter:search:type|itemsPerPage:actItem"
+                        ng-class="$even ? 'even-row' : 'odd-row _'">
+                        <td style="color: black">{{$index+1}}</td>
+                        <td style="color: black">{{matpel.nama_matpel}}</td>
+                        <td>
+                            <div ng-click="editMatpel(matpel)" class="btn btn-info">Edit</div>
+                            <div ng-click="deleteMatpel(matpel)" class="btn btn-danger">Delete</div>
+                        </td>
+                    </tr>
+                </table>
+                <div class="text-center">
+
+                    <dir-pagination-controls max-size="5" direction-links="true" boundary-links="true">
+                    </dir-pagination-controls>
+                </div>
+            </center>
+            <div class="container" ng-show="UserFormContainer">
+                <div class="row">
+
+                    <div ng-click="closeFrmBtn()" style="color: black">X</div>
+
+                    <table class="table">
+                        <input type="text" hidden disabled="disabled" ng-model="matpelId" />
+                        <tr>
+                            <td style="color: black" align="center">Nama matpel</td>
+                            <td><input type="text" ng-model="nama_matpel" /></td>
+                        </tr>
+                        <tr>
+                            <td><input type="button" class="btn btn-default" value="Save" ng-click="AddUpdateMatpel()" />
+                            </td>
+                            <td><input type="button" class="btn btn-danger" value="Cancel" ng-click="" /></td>
+                        </tr>
+                    </table>
+
+                </div>
+            </div>
+            <br>
+        </div>
+    </div>
+    <footer>
+        <br>
+    </footer>
+
+</body>
+
+</html>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
+    crossorigin="anonymous"></script>
+<script src="js/angular.min.js"></script>
+<script src="js/dirPagination.js"></script>
+<script src="js/module.js"></script>
+<script src="js/services.js"></script>
+<script src="js/controller.js"></script>
